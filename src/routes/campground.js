@@ -82,6 +82,9 @@ router.patch("/campground/:id", auth, async (req, res) => {
                 query: req.body.location,
                 limit: 1
             }).send()
+            if (geoData.body.features.length === 0) {
+                throw new Error("Could not find the location. Please enter a valid location")
+            }
             campground.geometry = geoData.body.features[0].geometry
         }
         updates.forEach(update => campground[update] = req.body[update])
